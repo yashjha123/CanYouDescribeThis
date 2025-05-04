@@ -1,0 +1,11 @@
+/* bg-gradient-to-br from-[#4b007d] to-[#0a043c] */
+.waves {
+    --percentage: 0%;
+    background: linear-gradient(to right, var(--color-foreground) var(--percentage), var(--color-background) 100%);
+    transition: var(--percentage) 10s ease-in-out;
+}
+
+.waves:hover{
+    --percentage: 100%;
+
+}
