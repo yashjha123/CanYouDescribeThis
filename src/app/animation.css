@@ -1,11 +1,29 @@
-/* bg-gradient-to-br from-[#4b007d] to-[#0a043c] */
-.waves {
-    --percentage: 0%;
-    background: linear-gradient(to right, var(--color-foreground) var(--percentage), var(--color-background) 100%);
-    transition: var(--percentage) 10s ease-in-out;
+.mary-go-round {
+    animation: rotateTillEternity 60s linear infinite;
+    /* animation-timing-function: cubic-bezier(0.895, 0.03, 0.685, 0.22); */
 }
 
-.waves:hover{
-    --percentage: 100%;
+@keyframes rotateTillEternity {
+    0% {
+        rotate: 0deg;
+    }
+    100% {
+        rotate: 360deg;
+    }
+}
 
+.ball {
+    animation: upAndDown 60s ease-in infinite;
+}
+
+@keyframes upAndDown {
+    0% {
+        transform: translateY(300px);
+    }
+    50% {
+        transform: translateY(800px);
+    }
+    100% {
+        transform: translateY(200px);
+    }
 }
