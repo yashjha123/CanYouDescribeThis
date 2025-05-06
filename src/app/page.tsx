@@ -17,10 +17,10 @@ const TextBox = ({
   checkAttempt,
 }: {
   isLocked: boolean;
-  setIsLocked: any;
+  setIsLocked: (isLocked: boolean) => void;
   text: string;
-  setText: any;
-  checkAttempt: any;
+  setText: (text: string) => void;
+  checkAttempt: (text: string) => void;
 }) => {
 
   return (
@@ -80,8 +80,7 @@ export default function Home() {
     }
   }
 
-  const Card = useMemo(() => {
-    return ({ i }: { i: number }) => {
+  const Card = useMemo(() => function CardGen({ i }: { i: number })  {
       return (
         <motion.div animate={i == pickedCard ? { rotate: 360 } : {}} className="padding-[16px] rounded-xl bg-indigo-950/50 backdrop-blur-sm flex flex-col gap-4 items-center justify-center cursor-pointer transition-all duration-500 ease-out hover:scale-105 hover:bg-indigo-950 w-[230px] h-[180px]">
           <Image
@@ -92,7 +91,6 @@ export default function Home() {
           />
         </motion.div>
       );
-    };
   }, [pickedCard]);
 
   useEffect(() => {
