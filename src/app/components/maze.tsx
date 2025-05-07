@@ -5,12 +5,15 @@ import Image from "next/image";
 import AnswerBox from "./answerBox";
 import {
   getRandomImages,
-  getRecommendations,
   getTextEmbeddings,
   checkIfTextMatchesImages,
 } from "../api/vectors";
 import { createClient } from "@supabase/supabase-js";
-import { image } from "motion/react-client";
+
+type MatchResult = {
+  id: string;
+  similarity: number;
+};
 
 const randomImage = ({ i }: { i: number }) => {
   const seed = "LifeIsGood";
@@ -54,7 +57,6 @@ const Maze = () => {
   const [timer, setTimer] = useState(1);
   const [isLocked, setIsLocked] = useState(false);
   const [info, setInfo] = useState("");
-  const [gameStarted, setGameStarted] = useState(false);
 
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
   const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
@@ -97,13 +99,10 @@ const Maze = () => {
         return;
       }
 
-      // Step 4 & 5: Process results and update image colors
-      let allCorrect = true;
-      let anyCorrect = false;
       
       // Create a map of matched image indexes
       const matchedIndexes = new Map();
-      matchResults.forEach((match: any) => {
+      matchResults.forEach((match: MatchResult) => {
         matchedIndexes.set(match.id, {
           score: match.similarity
         });
@@ -112,7 +111,7 @@ const Maze = () => {
       // Update image colors based on matching results
       setImages((currentImages: CardType[]) => {
         const reset = currentImages.map(e=>{return {...e, selected: false}});
-        return reset.map((image: CardType, index: number) => {
+        return reset.map((image: CardType) => {
           const matchInfo = matchedIndexes.get(image.id);
           console.log(matchedIndexes)
           if (!matchInfo) {
@@ -153,7 +152,7 @@ const Maze = () => {
   useEffect(() => {
     const interval = setTimeout(() => {
       if (timer <= 0) {
-        setGameStarted(true);
+        // setGameStarted(true);
         setText(""); // Clear the "Game starts" text
         return;
       }
@@ -178,7 +177,7 @@ const Maze = () => {
       
       setImages(formattedData);
     });
-  }, []);
+  }, [supabase]);
 
   const Card = useMemo(
     () =>

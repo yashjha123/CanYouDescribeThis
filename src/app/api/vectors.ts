@@ -1,11 +1,11 @@
 import { SupabaseClient } from "@supabase/supabase-js";
-interface CardType {
-  id: string,
-  src: string;
-  color: string;
-  index: number;
-  selected: boolean;
-}
+// interface CardType {
+//   id: string,
+//   src: string;
+//   color: string;
+//   index: number;
+//   selected: boolean;
+// }
 
 // create or replace function match_documents (
 //     query_embedding vector(512),
@@ -14,7 +14,6 @@ interface CardType {
 //   )
 export const getTextEmbeddings = async (text: string) => {
   // rest api fetch to
-  const URL = process.env.NEXT_CLIP_SERVER_URL as string;
   const response = await fetch("http://localhost:8080/predictions/clip_text", {
     method: "POST",
     headers: {
@@ -26,7 +25,7 @@ export const getTextEmbeddings = async (text: string) => {
       throw new Error("Failed to fetch data");
     }
     return res.json();
-  })
+  });
   return response;
 };
 
@@ -47,22 +46,25 @@ export const getRecommendations = async (
   return data;
 };
 
-
 export const getPublicURL = async (path: string, client: SupabaseClient) => {
-  let {data} = await client.storage.from("images").getPublicUrl(path);
+  const { data } = client.storage.from("images").getPublicUrl(path);
   return data.publicUrl;
-}
+};
 
+type RandomImage = {
+  id: string;
+  path: string;
+};
 export const getRandomImages = async (supabase: SupabaseClient) => {
   // rpc to get_random_images
   const { data, error } = await supabase.rpc("get_random_images", {});
   if (error) {
     console.error(error);
   }
-  console.log(data)
-  const populatedImages = data.map(async (item: any, index: number) => {
+  console.log(data);
+  const populatedImages = data.map(async (item: RandomImage, index: number) => {
     return {
-      id: item.path,
+      id: item.path as string,
       src: await getPublicURL(item.path, supabase),
       color: "#03A791",
       index: index,
@@ -70,20 +72,23 @@ export const getRandomImages = async (supabase: SupabaseClient) => {
     };
   });
   return Promise.all(populatedImages);
-}
+};
 
 type MatchResult = {
   id: string;
   similarity: number;
 };
 
-
 const normalize_vector = (vector: number[]) => {
   const norm = Math.sqrt(vector.reduce((acc, val) => acc + val * val, 0));
   return vector.map((val) => val / norm);
 };
 
-export const checkIfTextMatchesImages = async (text_embeddings: number[], image_ids: string[], client: SupabaseClient): Promise<MatchResult[]>=> {
+export const checkIfTextMatchesImages = async (
+  text_embeddings: number[],
+  image_ids: string[],
+  client: SupabaseClient
+): Promise<MatchResult[]> => {
   const { data, error } = await client.rpc("match_documents_in_context", {
     query_embedding: normalize_vector(text_embeddings),
     id_list: image_ids,
@@ -95,5 +100,5 @@ export const checkIfTextMatchesImages = async (text_embeddings: number[], image_
     return [];
   }
 
-  return data.filter((item: any) => item.similarity > 0.25);
-}
+  return data.filter((item: MatchResult) => item.similarity > 0.25);
+};

@@ -1,42 +1,19 @@
-import React, { useEffect } from "react";
-import {
-  getPublicURL,
-  getRecommendations,
-  getTextEmbeddings,
-} from "../api/vectors";
-import { createClient } from "@supabase/supabase-js";
+import React from "react";
 
-interface CardType {
-  src: string;
-  color: string;
-  index: number;
-  selected: boolean;
-}
-
-const randomImage = ({ i }: { i: number }) => {
-  const seed = "LifeIsGoodOrIsItsNot";
-  return `https://picsum.photos/seed/${seed}-${i}/230/180`;
-};
 
 const AnswerBox = ({
   isLocked,
   setIsLocked,
   text,
   setText,
-  setImages,
   checkAttempt
 }: {
   isLocked: boolean;
   setIsLocked: (isLocked: boolean) => void;
   text: string;
   setText: (text: string) => void;
-  setImages: (images: any) => void;
   checkAttempt: (text: string) => Promise<void>;
 }) => {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
-  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
-
-  const client = createClient(supabaseUrl, supabaseKey);
 
   // useEffect(() => {
   //   const updateImages = setTimeout(async () => {
