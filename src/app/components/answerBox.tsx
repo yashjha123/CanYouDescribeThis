@@ -1,31 +1,69 @@
 import React, { useEffect } from "react";
-import { getRecommendations } from "../api/vectors";
-// import { createClient } from '@/utils/supabase/server'
+import {
+  getPublicURL,
+  getRecommendations,
+  getTextEmbeddings,
+} from "../api/vectors";
 import { createClient } from "@supabase/supabase-js";
+
+interface CardType {
+  src: string;
+  color: string;
+  index: number;
+  selected: boolean;
+}
+
+const randomImage = ({ i }: { i: number }) => {
+  const seed = "LifeIsGoodOrIsItsNot";
+  return `https://picsum.photos/seed/${seed}-${i}/230/180`;
+};
 
 const AnswerBox = ({
   isLocked,
   setIsLocked,
   text,
   setText,
-  checkAttempt,
+  setImages,
+  checkAttempt
 }: {
   isLocked: boolean;
   setIsLocked: (isLocked: boolean) => void;
   text: string;
   setText: (text: string) => void;
-  checkAttempt: (text: string) => void;
+  setImages: (images: any) => void;
+  checkAttempt: (text: string) => Promise<void>;
 }) => {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
   const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
 
-  const supabase = createClient(supabaseUrl, supabaseKey);
+  const client = createClient(supabaseUrl, supabaseKey);
 
-  useEffect(() => {
-    getRecommendations(text, supabase).then((data) => {
-      console.log(data);
-    });
-  }, [supabase, text]);
+  // useEffect(() => {
+  //   const updateImages = setTimeout(async () => {
+  //     if (!text || isLocked) return; // Skip if text is empty or input is locked
+      
+  //     const vector = await getTextEmbeddings(text);
+  //     const data = await getRecommendations(vector, client);
+  //     data.map((item: any, index: number) => {
+  //       console.log(item);
+  //       getPublicURL(item.metadata.path, client).then((item_url) => {
+  //         setImages((old: CardType[]) => {
+  //           const newImages = [...old];
+  //           if (index < newImages.length) {
+  //             newImages[index] = {
+  //               ...newImages[index],
+  //               src: item_url
+  //             };
+  //           }
+  //           return newImages;
+  //         });
+  //       });
+  //     });
+  //   }, 2000);
+
+  //   return () => clearTimeout(updateImages);
+  // }, [text, isLocked]);
+
   return (
     <div
       className={`fixed bottom-15 w-full lg:w-200 h-[80px] bg-white/90 backdrop-blur rounded-xl backdrop-blur-sm transition-all duration-500 ease-in-out ${
