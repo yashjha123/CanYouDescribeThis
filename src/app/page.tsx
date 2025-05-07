@@ -1,158 +1,34 @@
-"use client";
-import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
-import { motion } from "motion/react";
+import { useMemo } from "react";
 import "../app/animation.css";
 import SpinningBackground from "./components/spinningBackground";
-
-const randomImage = ({ i }: { i: number }) => {
-  const seed = "LifeIsGood";
-  return `https://picsum.photos/seed/${seed}-${i}/230/180`;
-};
-
-
-const TextBox = ({
-  isLocked,
-  setIsLocked,
-  text,
-  setText,
-  checkAttempt,
-}: {
-  isLocked: boolean;
-  setIsLocked: (isLocked: boolean) => void;
-  text: string;
-  setText: (text: string) => void;
-  checkAttempt: (text: string) => void;
-}) => {
-  return (
-    <div
-      className={`fixed bottom-15 w-full lg:w-200 h-[80px] bg-white/90 backdrop-blur rounded-xl backdrop-blur-sm transition-all duration-500 ease-in-out ${
-        isLocked ? "scale-103 backdrop-blur-none bg-transparent" : ""
-      }`}
-    >
-      {isLocked ? (
-        <div className="flex items-center justify-center gap-2 text-black w-full h-full text-xl">
-          Wait for the timer to stop!
-        </div>
-      ) : (
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            checkAttempt(text);
-          }}
-          className="w-full h-full bg-transparent text-black font-bold"
-        >
-          <input
-            type="text"
-            className={`w-full h-full bg-transparent text-xl p-4 rounded-xl border-none focus:outline-none text-center `}
-            placeholder="Type here..."
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            onFocus={() => setIsLocked(false)}
-            disabled={isLocked}
-          />
-        </form>
-      )}
-    </div>
-  );
-};
+import Maze from "./components/maze";
 
 export default function Home() {
-  const [text, setText] = useState("");
-  const [timer, setTimer] = useState(1);
-  const [isLocked, setIsLocked] = useState(false);
-  const [pickedCard, setPickedCard] = useState(0);
-  const [info, setInfo] = useState("");
-
-  const startGame = () => {
-    setText("");
-    const randomlyPickedCard = Math.floor(Math.random() * 10) + 1;
-    console.log("Picked", randomlyPickedCard);
-    setPickedCard(randomlyPickedCard);
-  };
-
-  const checkAttempt = (text: string) => {
-    console.log("Checking", text);
-
-    // for testing purposes we pick a random tile
-    const randomlyPickedCard = Math.floor(Math.random() * 10) + 1;
-    const isCorrect = randomlyPickedCard == pickedCard;
-    if (isCorrect) {
-      setInfo("Correct!");
-    } else {
-      setInfo("Incorrect!");
-    }
-  };
-
-  const Card = useMemo(
+  const CachedSpinningBackground = useMemo(
     () =>
-      function CardGen({ i }: { i: number }) {
-        return (
-          <motion.div
-            animate={i == pickedCard ? { rotate: 360 } : {}}
-            className="padding-[16px] rounded-xl bg-indigo-950/50 backdrop-blur-sm flex flex-col gap-4 items-center justify-center cursor-pointer transition-all duration-500 ease-out hover:scale-105 hover:bg-indigo-950 w-[230px] h-[180px]"
-          >
-            <Image
-              src={randomImage({ i: i })}
-              alt="Random Image"
-              fill={true}
-              className="margin-[30px] rounded-xl"
-            />
-          </motion.div>
-        );
+      function wraper() {
+        return <SpinningBackground />;
       },
-    [pickedCard]
-  );
 
-  useEffect(() => {
-    const interval = setTimeout(() => {
-      if (timer <= 0) {
-        startGame();
-        return;
-      }
-      setTimer((old) => {
-        setText("Game starts in " + (old - 1));
-        return old - 1;
-      });
-    }, 100);
-    return () => clearTimeout(interval);
-  }, [timer]);
+    []
+  );
 
   return (
     <>
-      <SpinningBackground />
+      <CachedSpinningBackground />
 
       <div className="grid grid-rows-[30px_1fr_40px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-        <div className="text-center space-y-4">
+        <div className="text-center space-y-4 bg-[white] bg-clip-text">
           <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-900 via-pink-600 to-indigo-500 text-transparent bg-clip-text">
-            Can you describe this? {timer}
+            Can you describe this?
           </h1>
-          <p className="text-indigo-800">{info}</p>
+          {/* <p className="text-indigo-800">{info}</p> */}
           <p className="text-indigo-800">
             Use your creativity to help AI find this image in the wild.
           </p>
         </div>
-        <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start md:gap-6 p-6 rounded-xl backdrop-blur bg-white/50">
-          <div className="grid grid-cols-3 gap-4 gap-[16px]">
-            <Card i={1} />
-            <Card i={2} />
-            <Card i={3} />
-            <Card i={4} />
-            <Card i={5} />
-            <Card i={6} />
-            <Card i={7} />
-            <Card i={8} />
-            <Card i={9} />
-          </div>
-        </main>
+        <Maze />
         {/* Floating Text Box */}``
-        <TextBox
-          isLocked={isLocked}
-          setIsLocked={setIsLocked}
-          text={text}
-          setText={setText}
-          checkAttempt={checkAttempt}
-        />
         {/* Footer */}
         {/* <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
         <a
