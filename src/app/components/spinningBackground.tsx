@@ -33,7 +33,8 @@ const SpinningBackground = () => {
 
   return (
     <div
-      className="position-fixed top-0 left-0 bg-black/50 backdrop-blur-sm"
+      className="top-0 left-0 backdrop-blur-sm"
+      style={{'position':"fixed", "overflow":"hidden", "width": "100vw", "height": "100vh"}}
     >
       <Ball color={"#03A791"} index={1} />
       <Ball color={"#E9A319 "} index={2} />
@@ -44,8 +45,8 @@ const SpinningBackground = () => {
           backgroundImage: `url(${noiseTexture.src})`,
           backgroundRepeat: "repeat",
           backgroundSize: "300px 300px",
-          width: "100vw",
-          height: "100vh",
+          width: "100%",
+          height: "100%",
         }}
       ></div>
     </div>

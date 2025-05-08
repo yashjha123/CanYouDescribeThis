@@ -1,3 +1,35 @@
+// // Mock function to get random images
+// export async function getRandomImages(supabase: any) {
+//   // In a real implementation, this would fetch from Supabase
+//   // For now, we'll return mock data
+//   return Array.from({ length: 9 }, (_, i) => ({
+//     id: `img-${i}`,
+//     src: `https://picsum.photos/seed/img-${i}/230/180`,
+//     color: "black",
+//     index: i,
+//     selected: false,
+//   }))
+// }
+
+// // Mock function to get text embeddings
+// export async function getTextEmbeddings(text: string) {
+//   // In a real implementation, this would call an embedding API
+//   // For now, we'll return a mock embedding
+//   return Array.from({ length: 1536 }, () => Math.random() * 2 - 1)
+// }
+
+// // Mock function to check if text matches images
+// export async function checkIfTextMatchesImages(textEmbedding: number[], imageIds: string[], supabase: any) {
+//   // In a real implementation, this would query Supabase for matches
+//   // For now, we'll return random matches
+//   const randomMatches = Math.random() > 0.5 ? [imageIds[Math.floor(Math.random() * imageIds.length)]] : []
+
+//   return randomMatches.map((id) => ({
+//     id,
+//     similarity: 0.8 + Math.random() * 0.2, // Random similarity between 0.8 and 1.0
+//   }))
+// }
+
 import { SupabaseClient } from "@supabase/supabase-js";
 // interface CardType {
 //   id: string,
@@ -100,5 +132,7 @@ export const checkIfTextMatchesImages = async (
     return [];
   }
 
-  return data.filter((item: MatchResult) => item.similarity > 0.25);
+
+
+  return data.filter((item: MatchResult) => item.similarity > 0.23);
 };

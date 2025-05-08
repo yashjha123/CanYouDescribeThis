@@ -18,7 +18,10 @@ export default function Home() {
       <CachedSpinningBackground />
 
       <div className="grid grid-rows-[30px_1fr_40px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-        <div className="text-center space-y-4 bg-[white] bg-clip-text">
+        <div
+          className="text-center space-y-4 bg-clip-text"
+          style={{ zIndex: "100" }}
+        >
           <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-900 via-pink-600 to-indigo-500 text-transparent bg-clip-text">
             Can you describe this?
           </h1>
