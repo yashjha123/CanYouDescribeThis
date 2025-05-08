@@ -116,7 +116,7 @@ export default function GameModal({ isOpen, onClose, type, score = 0, onStart, o
             <AlertTriangle className="w-16 h-16 text-red-500" />
           </motion.div>
           <h2 className="text-2xl font-bold text-gray-800 mb-2">Game Over</h2>
-          <p className="text-gray-600 mb-4">You've run out of chances!</p>
+          <p className="text-gray-600 mb-4">You&apos;ve run out of chances!</p>
           <div className="bg-indigo-100 rounded-lg p-4 mb-6">
             <p className="text-indigo-800 font-semibold">Your Score: {score}</p>
           </div>
