@@ -62,7 +62,7 @@ export default function GameModal({ isOpen, onClose, type, score = 0, onStart, o
 
           <div className="flex justify-between mt-8">
             {currentStep > 0 && (
-              <Button variant="outline" onClick={() => setCurrentStep((prev) => prev - 1)}>
+              <Button variant="outlined" onClick={() => setCurrentStep((prev) => prev - 1)}>
                 Back
               </Button>
             )}

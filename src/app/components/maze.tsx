@@ -1,3 +1,4 @@
+// @ts-ignore
 "use client";
 import { useEffect, useState, useRef, useCallback, memo } from "react";
 import { motion } from "framer-motion";
@@ -55,7 +56,7 @@ const MAX_CHANCES = 3;
 
 // Memoized Card component to prevent unnecessary re-renders
 const GameCard = memo(
-  function CachedGameCard({ cardData, isSelected }) {
+  function CachedGameCard({ cardData, isSelected }:{cardData: CardType, isSelected: boolean}) {
     const [isLoaded, setIsLoaded] = useState(false);
 
     // Get the appropriate background color (20% opacity)
@@ -123,9 +124,7 @@ const GameCard = memo(
       prevProps.cardData.src === nextProps.cardData.src &&
       prevProps.cardData.color === nextProps.cardData.color &&
       prevProps.cardData.selected === nextProps.cardData.selected &&
-      prevProps.isSelected === nextProps.isSelected &&
-      prevProps.gameWon === nextProps.gameWon &&
-      prevProps.gameOver === nextProps.gameOver
+      prevProps.isSelected === nextProps.isSelected
     );
   }
 );
@@ -136,6 +135,11 @@ const GameStatus = memo(function cachedGameStatus({
   gameTimer,
   score,
   chancesLeft,
+}:{
+  gameStarted: boolean,
+  gameTimer: number,
+  score: number,
+  chancesLeft: number
 }) {
   return (
     <div className="w-full flex justify-between items-center mb-2">
@@ -253,7 +257,7 @@ const Maze = () => {
   // Create highlight sequence animation
   const createHighlightSequence = useCallback(() => {
     // Create a sequence that ends with the selected card
-    const sequence = [];
+    const sequence: number[] = [];
     const numSteps = 5; // Number of cards to highlight before the target
 
     // Start with a random position
@@ -295,23 +299,26 @@ const Maze = () => {
     }
 
     // Now construct a path from the last random position to the target card
-    let pathToTarget = [];
+    let pathToTarget: number[] = [];
     currentIndex = sequence[sequence.length - 1];
 
     // Simple breadth-first search to find path to target
     if (currentIndex !== selectedCard) {
       const visited = new Set(sequence);
-      const queue = [[currentIndex, []]]; // [position, path]
+      const queue = [
+        [currentIndex, [] as number[]]
+      ]; // [position, path]
 
       while (queue.length > 0) {
-        const [pos, path] = queue.shift();
+        let [pos, path] = queue.shift()!;
+        path = path as number[]
 
         if (pos === selectedCard) {
-          pathToTarget = path;
+          pathToTarget = path as number[]
           break;
         }
 
-        const nextMoves = listPossibleIndices(pos);
+        const nextMoves = listPossibleIndices(pos as number);
         for (const next of nextMoves) {
           if (!visited.has(next)) {
             visited.add(next);
@@ -664,8 +671,6 @@ const Maze = () => {
               key={`card-${index}`}
               cardData={cardData}
               isSelected={cardData.selected}
-              gameWon={gameWon}
-              gameOver={gameOver}
             />
           ))}
         </div>
@@ -695,7 +700,7 @@ const Maze = () => {
         score={score}
         onRestart={handleRestart}
       />
-
+      
       <ToastContainer toasts={toasts} removeToast={removeToast} />
     </>
   );
