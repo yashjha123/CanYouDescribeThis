@@ -182,7 +182,7 @@ const Maze = () => {
   const [images, setImages] = useState<CardType[]>(
     Array.from(Array(9).keys()).map((i) => ({
       id: "00",
-      src: `https://picsum.photos/seed/LifeIsGood-${i}/230/180`,
+      src: ``,
       color: COLORS.default,
       index: i,
       selected: false,
@@ -648,7 +648,7 @@ const Maze = () => {
         className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start md:gap-6 p-6 rounded-xl backdrop-blur"
         style={{
           backgroundColor: "rgba(255, 255, 255, 0.1)",
-          boxShadow: "0 0 20px rgba(0, 0, 0, 0.3)",
+          boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
         }}
       >
         <GameStatus

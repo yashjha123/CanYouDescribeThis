@@ -46,10 +46,14 @@ import { SupabaseClient } from "@supabase/supabase-js";
 //   )
 export const getTextEmbeddings = async (text: string) => {
   // rest api fetch to
-  const response = await fetch("http://localhost:8080/predictions/clip_text", {
+  // -H "Authorization: Bearer <your-API-key>"
+  const token = process.env.NEXT_PUBLIC_CLIP_TOKEN as string;
+  const URL = process.env.NEXT_PUBLIC_CLIP_SERVER_URL as string;
+  const response = await fetch(URL+"/predictions/clip_text", {
     method: "POST",
     headers: {
       "Content-Type": "text/plain",
+      "Authorization": `Bearer ${token}`,
     },
     body: text,
   }).then((res) => {
