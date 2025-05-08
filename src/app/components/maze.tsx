@@ -182,6 +182,16 @@ const Maze = () => {
   const { toasts, addToast, removeToast } = useToast();
   const animationRef = useRef<NodeJS.Timeout | null>(null);
 
+
+
+  useEffect(() => {
+    // perform a request to the server so the PREFLIGHT is triggered
+    const server_url = process.env.NEXT_PUBLIC_SERVER_URL;
+    fetch(`${server_url}`).then((res) => {
+      console.log(res);
+    });
+  },[]);
+
   // Initialize 9 cards (0-8) instead of 10
   const [images, setImages] = useState<CardType[]>(
     Array.from(Array(9).keys()).map((i) => ({
