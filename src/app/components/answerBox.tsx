@@ -2,6 +2,7 @@
 import { Lato } from "next/font/google"
 import { CircularProgress } from "@mui/material"
 import { motion } from "framer-motion"
+import { CSSProperties } from "react"
 
 const labrada = Lato({
   subsets: ["latin"],
@@ -48,7 +49,7 @@ const AnswerBox = ({
           :<></>}
           <CircularProgress
             size={24}
-            style={{ margin: "30px", ...shouldItBeAtTheCenter}}
+            style={{ margin: "30px", ...shouldItBeAtTheCenter} as CSSProperties}
             disableShrink
             color="primary"
           />
